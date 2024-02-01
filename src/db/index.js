@@ -43,7 +43,7 @@ db.shipments.belongsTo(db.users,{foreignKey:'userId'})
 db.shipments.hasOne(db.order, { as: 'order', foreignKey: 'userId' });
 db.order.belongsTo(db.shipments, { as: 'shipment', foreignKey: 'userId' });
 
-sequelize.sync()
+sequelize.sync({force:false})
   .then(() => {
   })
   .catch((error) => {

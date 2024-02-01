@@ -106,11 +106,6 @@ const inventoryReport = async (req, res) => {
         const lowStockItems = await Inventory.count({ where: { quantity: { [Sequelize.Op.lt]: 10 } } });
         const outOfStockItems = await Inventory.count({ where: { quantity: 0 } });
 
-        // Turnover rate analysis
-        const turnoverRates = await Inventory.findAll({
-            attributes: ['itemName', [Sequelize.fn('RAND'), 'rate']], // Replace with actual turnover rate calculation logic
-        });
-
         // Financial summary
         const totalValue = await Inventory.sum(Sequelize.literal('"quantity" * "price"'));
         const averageCost = totalValue / totalItems;
@@ -124,8 +119,7 @@ const inventoryReport = async (req, res) => {
                 averageCost,
                 lowStockItems,
                 outOfStockItems,
-            },
-            turnoverRates,
+            }
         };
 
         res.json(reportResponse);
