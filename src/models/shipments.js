@@ -1,7 +1,16 @@
 module.exports = (sequelize, DataTypes) => {
-    const Shipment = sequelize.define('Shipment', {
+    const Shipment = sequelize.define('shipment', {
+        userID: {
+            type: DataTypes.INTEGER,
+            allowNull:false,
+        },
+        orderId : {
+            type: DataTypes.INTEGER,
+            allowNull:false,
+        },
         destination: {
             type: DataTypes.STRING,
+            allowNull:false,
         },
         shipment_date: {
             type: DataTypes.DATE,

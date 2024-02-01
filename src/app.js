@@ -7,10 +7,12 @@ const port = process.env.PORT;
 
 const userRouter = require("./routers/user")
 const inventoryRouter = require("./routers/inventory")
+const shipmentRouter = require("./routers/shipment")
 
 app.use(express.json());
 app.use(userRouter)
 app.use(inventoryRouter)
+app.use(shipmentRouter)
 
 app.get("/", (req, res) => {
   res.send("Welcome to the app");

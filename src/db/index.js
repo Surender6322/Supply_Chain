@@ -1,4 +1,6 @@
-const {Sequelize, DataTypes} = require('sequelize')
+const {Sequelize, DataTypes} = require('sequelize');
+const shipments = require('../models/shipments');
+const orders = require('../models/orders');
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
@@ -23,11 +25,23 @@ const db = {}
 db.sequelize = sequelize;
 db.Sequelize = Sequelize
 
-db.users = require("../models/users")
-db.inventory = require("../models/inventory")
-db.order = require("../models/orders")
-db.shipments = require("../models/shipments")
-db.reports = require("../models/reports")
+db.users = require("../models/users")(sequelize,DataTypes)
+db.inventory = require("../models/inventory")(sequelize,DataTypes)
+db.order = require("../models/orders")(sequelize,DataTypes)
+db.shipments = require("../models/shipments")(sequelize,DataTypes)
+db.reports = require("../models/reports")(sequelize,DataTypes)
+ 
+// one to many b/w users and reports
+db.users.hasMany(db.reports,{foreignKey:'userId'})
+db.reports.belongsTo(db.users,{foreignKey:'userId'})
+
+// one to many b/w users and shipments
+db.users.hasMany(db.shipments,{foreignKey:'userId'})
+db.shipments.belongsTo(db.users,{foreignKey:'userId'})
+
+// one to one b/w orders and shipments
+db.shipments.hasOne(db.order, { as: 'order', foreignKey: 'userId' });
+db.order.belongsTo(db.shipments, { as: 'shipment', foreignKey: 'userId' });
 
 sequelize.sync()
   .then(() => {
