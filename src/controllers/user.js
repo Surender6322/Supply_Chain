@@ -15,7 +15,7 @@ const register = async (req, res) => {
         }
         const user = await User.create(req.body)
         const token = await user.generateToken()
-        res.status(201).json({ message: "Registration successfully!" })
+        res.status(201).json({ message: "Registration successfully!",user })
 
 
     } catch (e) {
@@ -26,7 +26,7 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body
         const user = await User.findByCredentials(email, password)
-        res.status(200).json({ message: "Login successfully!" })
+        res.status(200).json({ message: "Login successfully!",user })
     } catch (e) {
         res.status(500).json({ message: "Internal Server Error" })
     }

@@ -1,0 +1,10 @@
+const express = require("express")
+const auth = require("../middleware/auth")
+
+const {addItem} = require("../controllers/inventory")
+
+const router = new express.Router()
+
+router.post("/inventory/add",auth,)
+
+module.exports = router

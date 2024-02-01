@@ -1,11 +1,16 @@
 const express = require("express");
 require("./db/index");
 
+
 const app = express();
 const port = process.env.PORT;
 
-app.use(express.json());
+const userRouter = require("./routers/user")
+const inventoryRouter = require("./routers/inventory")
 
+app.use(express.json());
+app.use(userRouter)
+app.use(inventoryRouter)
 
 app.get("/", (req, res) => {
   res.send("Welcome to the app");
