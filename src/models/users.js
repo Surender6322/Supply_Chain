@@ -66,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.prototype.generateToken = async function () {
     const user = this;
-    const token = jwt.sign({ id: user.id.toString(),userType:"user" }, "secret_secret");
+    const token = jwt.sign({ id: user.id.toString(),userType:"user" }, process.env.JWT_SECRET);
 
     // Get the current tokens as an array
     let tokens = JSON.parse(user.tokens || "[]");
