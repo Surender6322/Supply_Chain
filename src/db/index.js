@@ -23,6 +23,12 @@ const db = {}
 db.sequelize = sequelize;
 db.Sequelize = Sequelize
 
+db.users = require("../models/users")
+db.inventory = require("../models/inventory")
+db.order = require("../models/orders")
+db.shipments = require("../models/shipments")
+db.reports = require("../models/reports")
+
 sequelize.sync()
   .then(() => {
   })
