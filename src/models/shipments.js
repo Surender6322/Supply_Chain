@@ -1,6 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Shipment = sequelize.define('shipment', {
-        
+    const Shipment = sequelize.define('shipment', {       
         orderId : {
             type: DataTypes.INTEGER,
             allowNull:false,
@@ -16,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE,
         },
         status: {
-            type: DataTypes.ENUM('In Transit', 'Delayed', 'Delivered'),
+            type: DataTypes.ENUM('Order Accepted','In Transit', 'Delayed', 'Delivered'),
+            defaultValue: 'Order Accepted'
         },
         current_location: {
             type: DataTypes.STRING,

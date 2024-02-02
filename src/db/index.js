@@ -40,8 +40,8 @@ db.users.hasMany(db.shipments,{foreignKey:'userId'})
 db.shipments.belongsTo(db.users,{foreignKey:'userId'})
 
 // one to one b/w orders and shipments
-db.shipments.hasOne(db.order, { as: 'order', foreignKey: 'userId' });
-db.order.belongsTo(db.shipments, { as: 'shipment', foreignKey: 'userId' });
+db.order.hasOne(db.shipments, {foreignKey: 'orderId' });
+db.shipments.belongsTo(db.order, {foreignKey: 'orderId' });
 
 sequelize.sync({force:false})
   .then(() => {

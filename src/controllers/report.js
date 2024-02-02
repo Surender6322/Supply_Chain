@@ -1,8 +1,6 @@
 const db = require("../db/index")
 const Shipment = db.shipments
 const Inventory = db.inventory
-const Order = db.order
-const User = db.users
 
 const shipmentReport = async (req, res) => {
 
@@ -12,7 +10,7 @@ const shipmentReport = async (req, res) => {
 
     try {
         // Extract optional query parameters
-        const { startDate, endDate, filterByStatus, groupBy } = req.query;
+        const { startDate, endDate, filterByStatus } = req.query;
 
         // Build the where clause based on optional parameters
         const whereClause = {
@@ -51,11 +49,11 @@ const shipmentReport = async (req, res) => {
 
         const delayedPercentage = (deliveryAnalysis.delayedCount / deliveryAnalysis.totalCount) * 100;
 
-        // Geographical distribution (assuming a 'region' column in the Shipment model)
+        // Geographical distribution
         const geographicalDistribution = await Shipment.findAll({
             where: whereClause,
-            group: ['region'], // Change to the actual column name in your Shipment model
-            attributes: ['region', [Sequelize.fn('COUNT', '*'), 'shipmentsCount']],
+            group: ['destination'], // Change to the actual column name in your Shipment model
+            attributes: ['destination', [Sequelize.fn('COUNT', '*'), 'shipmentsCount']],
         });
 
         // Example response (replace with actual data)

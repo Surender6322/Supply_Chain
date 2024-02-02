@@ -6,6 +6,6 @@ const {addShipment,updateShipment} = require("../controllers/shipment")
 const router = new express.Router()
 
 router.post("/shipment/create",auth,addShipment)
-router.patch("/shipment/update",auth,updateShipment)
+router.patch("/shipment/update/:trackingld",auth,updateShipment)
 
 module.exports = router

@@ -1,11 +1,5 @@
-
 module.exports = (sequelize, DataTypes) => {
     const Inventory = sequelize.define('Inventory', {
-        item_id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-        },
         item_name: {
             type: DataTypes.STRING,
         },

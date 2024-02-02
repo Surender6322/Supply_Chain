@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define("user", {
-    username: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -31,30 +31,24 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
     },
-    role:{
-        type: DataTypes.ENUM('Staff', 'Manager'),
+    role: {
+      type: DataTypes.ENUM('Staff', 'Manager'),
+    },
+    department: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
     tokens: {
-      type: DataTypes.TEXT, // Store the array as a JSON text
-      defaultValue: "[]",
-      allowNull: false, // Default value as an empty array in string form
-      get() {
-        // Deserialize the stored JSON string to an array
-        return JSON.parse(this.getDataValue("tokens") || "[]");
-      },
-      set(value) {
-        // Serialize the array to a JSON string before storing
-        this.setDataValue("tokens", JSON.stringify(value || []));
-      },
+      type: DataTypes.JSON,
+      defaultValue: [],
+      allownull: false,
     },
   });
 
   User.beforeCreate(async (user, options) => {
-    user.username = user.username.trim();
+    user.name = user.name.trim();
     user.email = user.email.trim();
-    user.password = user.password.trim();
     user.password = await bcrypt.hash(user.password, 8);
-    user.tokens = JSON.stringify([]);
   });
 
   User.beforeUpdate(async (user, options) => {
@@ -64,35 +58,31 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
-  User.prototype.generateToken = async function () {
+  User.prototype.generateAuthToken = async function () {
     const user = this;
-    const token = jwt.sign({ id: user.id.toString(),userType:"user" }, process.env.JWT_SECRET);
 
-    // Get the current tokens as an array
-    let tokens = JSON.parse(user.tokens || "[]");
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "6h",
+    });
 
-    // Add a new token object
-    tokens.push({ token });
+    const existingTokens = user.getDataValue("tokens");
 
-    // Update the 'tokens' field with the updated array by serializing it back to a string
-    user.tokens = JSON.stringify(tokens);
+    existingTokens.push({ token });
 
-    // Save the updated tokens back to the database
-    await user.save();
-
+    await User.update({ tokens: existingTokens }, { where: { id: user.id } });
     return token;
   };
 
-  User.findByCredentials = async(email, password) => {
-    const user = await User.findOne({where :{ email}})
+  User.findByCredentials = async (email, password) => {
+    const user = await User.findOne({ where: { email } })
 
-    if(!user){
+    if (!user) {
       throw new Error("Unable to login !!")
     }
 
     const isMatch = await bcrypt.compare(password, user.password)
 
-    if(!isMatch){
+    if (!isMatch) {
       throw new Error("Unable to login !!")
     }
 

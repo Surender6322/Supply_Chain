@@ -9,12 +9,14 @@ const userRouter = require("./routers/user")
 const inventoryRouter = require("./routers/inventory")
 const shipmentRouter = require("./routers/shipment")
 const reportRouter = require("./routers/reports")
+const orderRouter = require("./routers/order")
 
 app.use(express.json());
 app.use(userRouter)
 app.use(inventoryRouter)
 app.use(shipmentRouter)
 app.use(reportRouter)
+app.use(orderRouter)
 
 app.get("/", (req, res) => {
   res.send("Welcome to the app");
