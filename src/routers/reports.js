@@ -6,6 +6,6 @@ const {shipmentReport,inventoryReport} = require("../controllers/report")
 const router = new express.Router()
 
 router.get("/reports/shipments",auth,shipmentReport)
-router.get("/report/inventory",auth,inventoryReport)
+router.get("/reports/inventory",auth,inventoryReport)
 
 module.exports = router
