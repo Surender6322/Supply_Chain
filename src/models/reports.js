@@ -10,11 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     generated_date: {
       type: DataTypes.DATE,
     },
-    total_value: {
-      type: DataTypes.FLOAT,
-    },
     report_data: {
-      type: DataTypes.TEXT, // or DataTypes.JSON if using JSON
+      type: DataTypes.JSON,
     },
   })
   return Report;

@@ -2,6 +2,7 @@ const db = require("../db/index")
 const Shipment = db.shipments
 const Inventory = db.inventory;
 const Orders = db.order;
+const Report = db.reports
 
 const { Sequelize, Op } = require('sequelize');
  
@@ -98,7 +99,8 @@ const shipmentReport = async (req, res) => {
             deliveryAnalysis,
             geographicalDistribution,
         };
- 
+        const generated_date = new Date()
+        await Report.create({userId:req.user.id,report_type:"Shipment",generated_date,report_data:reportResponse})
         res.json(reportResponse);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -208,7 +210,8 @@ const inventoryReport = async (req, res) => {
                 averageCost
             }
         };
- 
+        const generated_date = new Date()
+        await Report.create({userId:req.user.id,report_type:"Inventory",generated_date,report_data:reportOutcome})
         res.status(200).json(reportOutcome);
     } catch (error) {
         res.status(500).json({ message: error.message });
